@@ -1,5 +1,9 @@
 # Financial Insight Game - Implementation Roadmap
 
+
+## Overview
+Minimal Viable Product only.  As simple as possible.
+
 ## Phase 1: Data Retrieval and Storage (MVP)
 ### Objectives
 - Implement basic data retrieval from AdaTree
@@ -17,6 +21,12 @@
 - [ ] Store transaction data correctly
 - [ ] Handle API connection errors
 - [ ] Validate data structure
+
+### Notes
+.env file stores
+   cdrArrangementId
+   consentId
+   consumerId
 
 ## Phase 2: Visualization Prototype
 ### Objectives
@@ -98,13 +108,6 @@
    - Mitigation: Implement strict data protection, minimal data storage
 3. Performance Issues
    - Mitigation: Optimize data processing, lazy loading
-
-## Estimated Timeline
-- Phase 1: 1-2 weeks
-- Phase 2: 1-2 weeks
-- Phase 3: 2-3 weeks
-- Phase 4: 1-2 weeks
-- Phase 5: Ongoing improvement
 
 ## Success Criteria
 - Successful API integration
