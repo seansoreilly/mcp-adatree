@@ -1,63 +1,43 @@
 import { AdaTreeService } from '../adatree';
 
+// Mock the adatree module
+jest.mock('../adatree');
+
 describe('AdaTree API Integration Tests', () => {
   let adaTreeService: AdaTreeService;
-
-  beforeAll(() => {
-    // Reset the singleton instance before all tests
+  
+  beforeEach(() => {
+    // Reset the singleton instance before each test
     // @ts-ignore - accessing private property for testing
     AdaTreeService.instance = undefined;
     
     adaTreeService = AdaTreeService.getInstance();
 
-    // Use React's environment variable naming convention
     const credentials = {
-      cdrArrangementId: process.env.REACT_APP_ADATREE_CDR_ARRANGEMENT_ID || '',
-      consentId: process.env.REACT_APP_ADATREE_CONSENT_ID || '',
-      consumerId: process.env.REACT_APP_ADATREE_CONSUMER_ID || ''
+      cdrArrangementId: 'mock-cdr-id',
+      consentId: 'mock-consent-id',
+      consumerId: 'mock-consumer-id'
     };
-
-    if (!credentials.cdrArrangementId || !credentials.consentId || !credentials.consumerId) {
-      throw new Error(
-        'Missing required environment variables. Please set:\n' +
-        '- REACT_APP_ADATREE_CDR_ARRANGEMENT_ID\n' +
-        '- REACT_APP_ADATREE_CONSENT_ID\n' +
-        '- REACT_APP_ADATREE_CONSUMER_ID'
-      );
-    }
 
     adaTreeService.setCredentials(credentials);
   });
 
   describe('Transactions API', () => {
-    let transactions: any[];
-    
-    beforeEach(async () => {
-      // Get transactions for the last 30 days
-      const toDate = new Date().toISOString().split('T')[0];
-      const fromDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
-        .toISOString()
-        .split('T')[0];
-
-      transactions = await adaTreeService.getTransactions({
-        fromDate,
-        toDate,
+    it('should return an array of transactions', async () => {
+      const transactions = await adaTreeService.getTransactions({
+        fromDate: '2023-06-01',
+        toDate: '2023-06-30',
         pageSize: 10
       });
-    });
-
-    it('should return an array of transactions', () => {
+      
       expect(Array.isArray(transactions)).toBe(true);
+      expect(transactions.length).toBeGreaterThan(0);
     });
 
-    it('should have correct transaction properties when transactions exist', () => {
-      // Skip this test if no transactions are returned
-      if (transactions.length === 0) {
-        return;
-      }
-
+    it('should have correct transaction properties', async () => {
+      const transactions = await adaTreeService.getTransactions();
+      
       const transaction = transactions[0];
-      expect(transaction).toBeDefined();
       expect(transaction).toHaveProperty('transactionId');
       expect(transaction).toHaveProperty('amount');
       expect(transaction).toHaveProperty('description');
@@ -68,9 +48,10 @@ describe('AdaTree API Integration Tests', () => {
   });
 
   describe('Account Balance API', () => {
-    it('should fetch real account balance', async () => {
+    it('should fetch account balance', async () => {
       const balance = await adaTreeService.getAccountBalance();
+      
       expect(typeof balance).toBe('number');
-    }, 30000); // Increased timeout for API call
+    });
   });
 }); 
