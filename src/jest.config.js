@@ -15,6 +15,7 @@ module.exports = {
     ],
   },
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
+  setupFiles: ["dotenv/config"],
   setupFilesAfterEnv: ["<rootDir>/setupTests.ts"],
   globals: {
     "ts-jest": {

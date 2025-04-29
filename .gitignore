@@ -38,3 +38,5 @@ logs
 
 # Optional eslint cache
 .eslintcache 
+
+.env
